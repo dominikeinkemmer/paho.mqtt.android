@@ -4,11 +4,10 @@ group = 'com.github.dominikeinkemmer'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 24
+        targetSdkVersion 33
 
         testApplicationId "org.eclipse.paho.android.service.test"
     }
@@ -41,8 +40,8 @@ configurations {
 
 dependencies {
     implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:${rootProject.ext.clientVersion}"
-    compile "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:support-v4:25.3.1"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }
 
 android.libraryVariants.all { variant ->
@@ -132,10 +131,10 @@ task debug {
 }
 // Required to bundle Java library Jar in AAR
 clean.doLast{
-    copyLibs.execute()
+    dependsOn tasks.copyLibs
 }
 assemble.doLast {
-    renameReleaseAAR.execute()
+    dependsOn tasks.renameReleaseAAR
 }
 
 clean.doFirst {
