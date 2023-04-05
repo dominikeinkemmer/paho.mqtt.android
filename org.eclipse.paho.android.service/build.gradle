@@ -45,9 +45,9 @@ dependencies {
 }
 
 // Generate Sources Jar
-task("generateSourcesJar", type: Jar) {
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
 }
 
 // Copy the Paho Java client into the libs directory to bundle it with the AAR
@@ -75,7 +75,7 @@ publishing {
     publications {
         paho(MavenPublication) {
             groupId 'org.eclipse.paho'
-            artifact generateSourcesJar
+            artifact sourcesJar
             artifact generateLibraryJar
             artifact "$buildDir/outputs/aar/" + rootProject.ext.serviceArchivesBaseName + "-" + rootProject.ext.serviceVersion + ".aar"
         }
@@ -98,6 +98,9 @@ publishing {
     }
 }
 
+artifacts {
+    sourcesJar
+}
 
 task debug {
     doLast {
