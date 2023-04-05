@@ -57,10 +57,11 @@ println "SDK dir: $sdkDir"
 allprojects {
 
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             url "file://$sdkDir/extras/android/m2repository/"
         }
+        google()
     }
 
     version = rootProject.ext.serviceVersion
