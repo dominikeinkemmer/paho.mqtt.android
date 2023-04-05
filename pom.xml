@@ -4,7 +4,7 @@
     <groupId>org.eclipse.paho</groupId>
     <artifactId>org.eclipse.paho.android.service</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.1</version>
+    <version>1.2.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.android.service</artifactId>
-            <version>1.1.1</version>
+            <version>1.2.2</version>
         </dependency>
     </dependencies>
 
@@ -158,18 +158,13 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>target/org.eclipse.paho.android.service-1.1.1.jar</file>
+                                    <file>target/org.eclipse.paho.android.service-1.2.2.jar</file>
                                     <type>jar</type>
                                 </artifact>
                                 <artifact>
-                                    <file>target/org.eclipse.paho.android.service-1.1.1-sources.jar</file>
+                                    <file>target/org.eclipse.paho.android.service-1.2.2-sources.jar</file>
                                     <type>jar</type>
                                     <classifier>sources</classifier>
-                                </artifact>
-                                <artifact>
-                                    <file>target/org.eclipse.paho.android.service-1.1.1-javadoc.jar</file>
-                                    <type>jar</type>
-                                    <classifier>javadoc</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>

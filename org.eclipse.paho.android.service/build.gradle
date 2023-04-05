@@ -44,24 +44,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 }
 
-android.libraryVariants.all { variant ->
-    task("generate${variant.name}Javadoc", type: Javadoc) {
-        doFirst {
-            ext.androidJar =
-                    "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-        }
-
-        title = "$name $version API"
-        description "Generates Javadoc for $variant.name."
-        source = variant.javaCompileProvider
-        options.links("http://docs.oracle.com/javase/7/docs/api/");
-        options.links("http://d.android.com/reference/");
-        exclude '**/BuildConfig.java'
-        exclude '**/R.java'
-    }
-}
-
 // Generate Sources Jar
 task("generateSourcesJar", type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -69,7 +51,7 @@ task("generateSourcesJar", type: Jar) {
 }
 
 // Copy the Paho Java client into the libs directory to bundle it with the AAR
-task("copyLibs", type: Copy) {
+task("copyLibs", type: Copy, dependsOn: clean) {
     println "Copying MQTT Jar into libs directory"
     from configurations.compile
     into 'libs'
@@ -77,7 +59,7 @@ task("copyLibs", type: Copy) {
 }
 
 // Renames the Release AAR file to a maven convention
-task("renameReleaseAAR", type: Copy) {
+task("renameReleaseAAR", type: Copy, dependsOn: assemble) {
     from("$buildDir/outputs/aar")
     into("$buildDir/outputs/aar/")
     include('org.eclipse.paho.android.service-debug.aar')
@@ -89,19 +71,12 @@ task("generateLibraryJar", type: Jar) {
     from("$buildDir/intermediates/classes/release")
 }
 
-// Generate Javadoc
-task("generateJavaDocJar", type: Jar, dependsOn: (rootProject.ext.serviceVersion.endsWith('-SNAPSHOT') ? 'generatedebugJavadoc' : 'generatereleaseJavadoc')){
-    from("$buildDir/docs/javadoc")
-    classifier = 'javadoc'
-}
-
 publishing {
     publications {
         paho(MavenPublication) {
             groupId 'org.eclipse.paho'
             artifact generateSourcesJar
             artifact generateLibraryJar
-            artifact generateJavaDocJar
             artifact "$buildDir/outputs/aar/" + rootProject.ext.serviceArchivesBaseName + "-" + rootProject.ext.serviceVersion + ".aar"
         }
     }
@@ -128,13 +103,6 @@ task debug {
     doLast {
         configurations.compile.each { println it}
     }
-}
-// Required to bundle Java library Jar in AAR
-clean.doLast{
-    dependsOn tasks.copyLibs
-}
-assemble.doLast {
-    dependsOn tasks.renameReleaseAAR
 }
 
 clean.doFirst {
